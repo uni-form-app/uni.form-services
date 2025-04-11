@@ -5,7 +5,7 @@ import { CreateUserDto } from 'src/modules/users/dto/create-user';
 import { Public } from './decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
 
-@ApiTags('Authentication')
+@ApiTags('Autenticação')
 @Controller('auth')
 @Public()
 export class AuthController {
