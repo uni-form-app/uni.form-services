@@ -15,5 +15,5 @@ export class CreatePartnerDto {
 
   @IsString()
   @IsNotEmpty()
-  addressId: string; // Tornado obrigatório
+  addressId: string;
 }
