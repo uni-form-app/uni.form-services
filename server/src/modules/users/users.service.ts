@@ -24,6 +24,13 @@ export class UsersService {
   @ApiResponse({ status: 404, description: 'User not found' })
   getByEmail(email: string) {
     return this.db.user.findUnique({
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        createdAt: true,
+        password: true,
+      },
       where: {
         email
       },

@@ -15,7 +15,7 @@ export class AuthController {
 
   @Post()
   @ApiOperation({ summary: 'Realizar login de um usuario' })
-  @ApiBody({ type: SignInDto })
+  @ApiBody({ type: SignInDto, description: 'Dados para autenticação do usuário', examples: { example1: { value: { username: 'usuario_exemplo', password: 'senha123' } } } })
   @ApiResponse({ status: 200, description: 'User signed in successfully', schema: { example: { id: 'uuid', username: 'user', email: 'user@example.com', token: 'jwt-token' } } })
   @ApiResponse({ status: 404, description: 'user-credentials-invalid' })
   signIn(@Body() data: SignInDto) {
