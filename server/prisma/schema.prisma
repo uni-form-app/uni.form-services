@@ -42,10 +42,10 @@ model Address {
 model Partner {
   id        String   @id @default(uuid())
   name      String
-  addressId String   @unique
+  addressId String?  @unique
   createdAt DateTime @default(now())
 
-  address Address @relation(fields: [addressId], references: [id])
+  address Address? @relation(fields: [addressId], references: [id])
   Order   Order[]
 }
 
