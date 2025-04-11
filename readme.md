@@ -24,71 +24,72 @@ Este repositório contém os serviços do aplicativo uni.form, um sistema de ven
 ## Tecnologias
 
 ## Models
-User
-├── id (PK)
-├── username
-├── email (unique)
-├── password
-├── addressId (FK -> Address.id)
-├── createdAt
-├── listings [1:N] ──────────────┐
-├── orders (compras) [1:N]       │
-├── sales  (vendas) [1:N]        │
-├── ratingsGiven [1:N]           │
-└── ratingsReceived [1:N]        │
-                                 │
-Address                          │
-├── id (PK)                      │
-├── street, number, zipCode...  │
-├── latitude, longitude          │◄─────── Permite busca geográfica por parceiro
-├── user [1:1 optional]          │
-└── partner [1:1 optional]       │
-                                 │
-Partner                          │
-├── id (PK)                      │
-├── name                         │
-├── addressId (FK -> Address.id) │
-├── createdAt                    │
-└── orders [1:N]                 │
 
-Product
-├── id (PK)
-├── name, description, size, school
-├── condition (enum: NEW, USED, etc.)
-├── createdAt
-└── listing [1:1 optional]
+### User
+- **id** (PK)
+- **username**
+- **email** (unique)
+- **password**
+- **addressId** (FK -> Address.id)
+- **createdAt**
+- **listings** [1:N]
+- **orders** (compras) [1:N]
+- **sales** (vendas) [1:N]
+- **ratingsGiven** [1:N]
+- **ratingsReceived** [1:N]
 
-Listing
-├── id (PK)
-├── productId (FK -> Product.id, unique)
-├── sellerId (FK -> User.id)
-├── price
-├── status (enum: ACTIVE, SOLD, etc.)
-├── createdAt
-├── images [1:N] ────────────────┐
-└── orders [1:N]                 │
+### Address
+- **id** (PK)
+- **street**, **number**, **zipCode**...
+- **latitude**, **longitude** (Permite busca geográfica por parceiro)
+- **user** [1:1 optional]
+- **partner** [1:1 optional]
 
-Image                            │
-├── id (PK)                      │
-├── path                         │
-├── listingId (FK -> Listing.id) │
-├── isMain (bool)                │◄────── Define a imagem de cover
+### Partner
+- **id** (PK)
+- **name**
+- **addressId** (FK -> Address.id)
+- **createdAt**
+- **orders** [1:N]
 
-Order
-├── id (PK)
-├── listingId (FK)
-├── buyerId (FK -> User)
-├── sellerId (FK -> User)
-├── partnerId (FK -> Partner)
-├── status (string: pendente, concluído, etc.)
-├── createdAt
-├── deliveredAt (optional)
-└── confirmedAt (optional)
+### Product
+- **id** (PK)
+- **name**, **description**, **size**, **school**
+- **condition** (enum: NEW, USED, etc.)
+- **createdAt**
+- **listing** [1:1 optional]
 
-Rating
-├── id (PK)
-├── fromUserId (FK -> User)
-├── toUserId (FK -> User)
-├── score (1–5)
-├── comment
-└── createdAt
+### Listing
+- **id** (PK)
+- **productId** (FK -> Product.id, unique)
+- **sellerId** (FK -> User.id)
+- **price**
+- **status** (enum: ACTIVE, SOLD, etc.)
+- **createdAt**
+- **images** [1:N]
+- **orders** [1:N]
+
+### Image
+- **id** (PK)
+- **path**
+- **listingId** (FK -> Listing.id)
+- **isMain** (bool) (Define a imagem de cover)
+
+### Order
+- **id** (PK)
+- **listingId** (FK)
+- **buyerId** (FK -> User)
+- **sellerId** (FK -> User)
+- **partnerId** (FK -> Partner)
+- **status** (string: pendente, concluído, etc.)
+- **createdAt**
+- **deliveredAt** (optional)
+- **confirmedAt** (optional)
+
+### Rating
+- **id** (PK)
+- **fromUserId** (FK -> User)
+- **toUserId** (FK -> User)
+- **score** (1–5)
+- **comment**
+- **createdAt**
