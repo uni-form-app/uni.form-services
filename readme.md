@@ -1,6 +1,14 @@
 # uni.form
 Este repositório contém os serviços do aplicativo uni.form, um sistema de venda de uniformes escolares com foco em sustentabilidade e economia colaborativa. A plataforma funciona como um marketplace, permitindo que usuários anunciem, vendam ou doem uniformes escolares. Para facilitar a logística, contamos com parceiros locais (como escolas e papelarias) que atuam como pontos de entrega e retirada dos produtos.
 
+## Tecnologias
+- **TypeScript**
+- **Node.js**
+- **Nest.js**
+- **Prisma**
+- **PostgreSQL**
+- **Docker**
+
 ## Funcionalidades
 
 - Autenticação de usuários.
@@ -20,8 +28,6 @@ Este repositório contém os serviços do aplicativo uni.form, um sistema de ven
 - Cada pedido deve ser vinculado a um ponto de retirada.
 - O vendedor deve levar o produto até o ponto de retirada
 - As imagens de produtos devem ser analisadas pela IA para avaliar a qualidade e adequação do produto.
-
-## Tecnologias
 
 ## Models
 
