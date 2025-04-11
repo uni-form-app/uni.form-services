@@ -1,16 +1,115 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
 model User {
   id        String   @id @default(uuid())
   username  String
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+  addressId String?  @unique
+
+  address Address? @relation(fields: [addressId], references: [id])
+
+  listings        Listing[]
+  orders          Order[]   @relation("BuyerOrders")
+  sales           Order[]   @relation("SellerSales")
+  ratingsGiven    Rating[]  @relation("UserGivenRatings")
+  ratingsReceived Rating[]  @relation("UserReceivedRatings")
+}
+
+model Address {
+  id           String @id @default(uuid())
+  street       String
+  number       String
+  neighborhood String
+  city         String
+  state        String
+  zipCode      String
+  latitude     Float
+  longitude    Float
+
+  user    User?
+  partner Partner?
+}
+
+model Partner {
+  id        String   @id @default(uuid())
+  name      String
+  addressId String   @unique
+  createdAt DateTime @default(now())
+
+  address Address @relation(fields: [addressId], references: [id])
+  Order   Order[]
+}
+
+enum Condition {
+  NEW
+  USED
+  REFURBISHED
+  DAMAGED
+  EXCELLENT
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  size        String
+  school      String
+  condition   Condition
+  createdAt   DateTime  @default(now())
+
+  listing Listing?
+}
+
+enum listingStatus {
+  ACTIVE
+  SOLD
+  DONATED
+  REMOVED
+}
+
+model Listing {
+  id        String        @id @default(uuid())
+  product   Product       @relation(fields: [productId], references: [id])
+  productId String        @unique
+  seller    User          @relation(fields: [sellerId], references: [id])
+  sellerId  String
+  price     Float
+  status    listingStatus @default(ACTIVE)
+  createdAt DateTime      @default(now())
+  images    Image[]
+  Order     Order[]
+}
+
+model Image {
+  id        String  @id @default(uuid())
+  path      String
+  listingId String
+  listing   Listing @relation(fields: [listingId], references: [id])
+}
+
+model Order {
+  id          String    @id @default(uuid())
+  listing     Listing   @relation(fields: [listingId], references: [id])
+  listingId   String
+  buyer       User      @relation("BuyerOrders", fields: [buyerId], references: [id])
+  buyerId     String
+  seller      User      @relation("SellerSales", fields: [sellerId], references: [id])
+  sellerId    String
+  partner     Partner   @relation(fields: [partnerId], references: [id])
+  partnerId   String
+  status      String
+  createdAt   DateTime  @default(now())
+  deliveredAt DateTime?
+  confirmedAt DateTime?
+}
+
+model Rating {
+  id         String   @id @default(uuid())
+  from       User     @relation("UserGivenRatings", fields: [fromUserId], references: [id])
+  fromUserId String
+  to         User     @relation("UserReceivedRatings", fields: [toUserId], references: [id])
+  toUserId   String
+  score      Int
+  comment    String?
+  createdAt  DateTime @default(now())
 }
