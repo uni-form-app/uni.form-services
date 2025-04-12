@@ -5,35 +5,42 @@ import {
 } from '@nestjs/common';
 import { SignInDto } from 'src/modules/auth/dto/sign-in';
 import { UsersService } from '../users/users.service';
-import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/modules/users/dto/create-user';
 import { JwtService } from '@nestjs/jwt';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signIn(data: SignInDto) {
     const { email, password } = data;
+
     const user = await this.usersService.getByEmail(email);
 
-    if (!user) throw new NotFoundException('user-not-found');
+    if (!user) {
+      throw new NotFoundException('user-not-found');
+    }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await argon2.verify(user.password, password);
 
-    if (!isMatch) throw new NotFoundException('user-credentials-invalid');
+    if (!isMatch) {
+      throw new NotFoundException('user-credentials-invalid');
+    }
 
     const payload = {
       ...user,
       password: undefined,
     };
 
+    const token = this.jwtService.sign(payload);
+
     return {
       ...payload,
-      token: this.jwtService.sign(payload),
+      token,
     };
   }
 
@@ -44,7 +51,7 @@ export class AuthService {
 
     if (isEmailExists) throw new BadRequestException('email-in-use');
 
-    const password = await bcrypt.hash(_password, 15); // 15 é o número de rounds de hash
+    const password = await argon2.hash(_password);
 
     return this.usersService.create({
       ...user,
