@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User } from './user';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateUserDto extends User {

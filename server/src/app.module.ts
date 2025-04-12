@@ -19,9 +19,11 @@ import { PartnersModule } from './modules/partners/partners.module';
     ProductsModule,
     PartnersModule,
   ],
-  providers: [{
-    provide: APP_GUARD,
-    useClass: JwtGuard
-  }]
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtGuard,
+    },
+  ],
 })
-export class AppModule { }
+export class AppModule {}

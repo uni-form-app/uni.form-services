@@ -6,11 +6,13 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe({
-    transform: true, // Enables class-transformer
-    whitelist: true, // Strips properties not defined in the DTO
-    stopAtFirstError: true
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true, // Enables class-transformer
+      whitelist: true, // Strips properties not defined in the DTO
+      stopAtFirstError: true,
+    }),
+  );
   app.enableCors();
 
   const config = new DocumentBuilder()
@@ -23,4 +25,7 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+
+bootstrap().catch((error) => {
+  console.error('Error during application bootstrap:', error);
+});

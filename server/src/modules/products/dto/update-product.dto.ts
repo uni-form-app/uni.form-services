@@ -16,6 +16,9 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   @ApiPropertyOptional({ description: 'Escola opcional associada ao produto' })
   school?: string;
 
-  @ApiPropertyOptional({ description: 'Condição opcional do produto', enum: Condition })
+  @ApiPropertyOptional({
+    description: 'Condição opcional do produto',
+    enum: Condition,
+  })
   condition?: Condition;
 }
