@@ -15,13 +15,12 @@ model User {
   createdAt DateTime @default(now())
   addressId String?  @unique
 
-  address Address? @relation(fields: [addressId], references: [id])
-
-  listings        Listing[]
+  address         Address?  @relation(fields: [addressId], references: [id])
   orders          Order[]   @relation("BuyerOrders")
   sales           Order[]   @relation("SellerSales")
   ratingsGiven    Rating[]  @relation("UserGivenRatings")
   ratingsReceived Rating[]  @relation("UserReceivedRatings")
+  productsForSale Product[]
 }
 
 model Address {
@@ -46,79 +45,66 @@ model Partner {
   createdAt DateTime @default(now())
 
   address Address? @relation(fields: [addressId], references: [id])
-  Order   Order[]
+  orders  Order[]
 }
 
-enum Condition {
-  NEW
-  USED
-  REFURBISHED
-  DAMAGED
-  EXCELLENT
+enum ProductStatus {
+  AVAILABLE
+  SOLD
+  PENDING
 }
 
 model Product {
-  id          String    @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   description String
   size        String
   school      String
-  condition   Condition
-  createdAt   DateTime  @default(now())
+  condition   Int
+  price       Float
+  sellerId    String
+  createdAt   DateTime      @default(now())
+  status      ProductStatus @default(AVAILABLE)
 
-  listing Listing?
-}
-
-enum listingStatus {
-  ACTIVE
-  SOLD
-  DONATED
-  REMOVED
-}
-
-model Listing {
-  id        String        @id @default(uuid())
-  product   Product       @relation(fields: [productId], references: [id])
-  productId String        @unique
-  seller    User          @relation(fields: [sellerId], references: [id])
-  sellerId  String
-  price     Float
-  status    listingStatus @default(ACTIVE)
-  createdAt DateTime      @default(now())
-  images    Image[]
-  Order     Order[]
+  seller User    @relation(fields: [sellerId], references: [id])
+  images Image[]
+  order  Order?  @relation("ProductOrder")
 }
 
 model Image {
   id        String  @id @default(uuid())
   path      String
-  listingId String
-  listing   Listing @relation(fields: [listingId], references: [id])
+  productId String?
+
+  product Product? @relation(fields: [productId], references: [id])
 }
 
 model Order {
   id          String    @id @default(uuid())
-  listing     Listing   @relation(fields: [listingId], references: [id])
   listingId   String
-  buyer       User      @relation("BuyerOrders", fields: [buyerId], references: [id])
   buyerId     String
-  seller      User      @relation("SellerSales", fields: [sellerId], references: [id])
   sellerId    String
-  partner     Partner   @relation(fields: [partnerId], references: [id])
   partnerId   String
+  productId   String    @unique
   status      String
   createdAt   DateTime  @default(now())
   deliveredAt DateTime?
   confirmedAt DateTime?
+
+  buyer   User    @relation("BuyerOrders", fields: [buyerId], references: [id])
+  seller  User    @relation("SellerSales", fields: [sellerId], references: [id])
+  partner Partner @relation(fields: [partnerId], references: [id])
+  product Product @relation("ProductOrder", fields: [productId], references: [id])
 }
 
 model Rating {
   id         String   @id @default(uuid())
-  from       User     @relation("UserGivenRatings", fields: [fromUserId], references: [id])
   fromUserId String
-  to         User     @relation("UserReceivedRatings", fields: [toUserId], references: [id])
   toUserId   String
   score      Int
   comment    String?
   createdAt  DateTime @default(now())
+
+  from User @relation("UserGivenRatings", fields: [fromUserId], references: [id])
+  to   User @relation("UserReceivedRatings", fields: [toUserId], references: [id])
 }
