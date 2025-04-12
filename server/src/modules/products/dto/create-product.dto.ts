@@ -1,5 +1,13 @@
-import { IsString, IsEnum, IsNotEmpty } from 'class-validator';
-import { Condition } from '@prisma/client';
+import {
+  IsString,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsInt,
+  Min,
+  Max,
+} from 'class-validator';
+import { ProductStatus } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProductDto {
@@ -23,8 +31,28 @@ export class CreateProductDto {
   @IsNotEmpty()
   school: string;
 
-  @ApiProperty({ description: 'Condição do produto', enum: Condition })
-  @IsEnum(Condition)
+  @ApiProperty({ description: 'Preço do produto' })
+  @IsNumber()
   @IsNotEmpty()
-  condition: Condition;
+  price: number;
+
+  @ApiProperty({ description: 'Status do produto', enum: ProductStatus })
+  @IsEnum(ProductStatus)
+  @IsNotEmpty()
+  status: ProductStatus;
+
+  @ApiProperty({ description: 'ID do vendedor associado ao produto' })
+  @IsString()
+  @IsNotEmpty()
+  sellerId: string;
+
+  @ApiProperty({
+    description: 'Condição do produto (0-10)',
+    minimum: 0,
+    maximum: 10,
+  })
+  @IsInt()
+  @Min(0)
+  @Max(10)
+  condition: number;
 }

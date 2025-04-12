@@ -1,5 +1,4 @@
-import { IsOptional, IsString, IsEnum } from 'class-validator';
-import { Condition } from '@prisma/client';
+import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class ListProductDto {
@@ -13,8 +12,11 @@ export class ListProductDto {
   @IsString()
   school?: string;
 
-  @ApiPropertyOptional({ description: 'Condição do produto', enum: Condition })
+  @ApiPropertyOptional({ description: 'Condição do produto', minimum: 0, maximum: 10 })
+  @ApiPropertyOptional({ description: 'Condição do produto (0-10)' })
   @IsOptional()
-  @IsEnum(Condition)
-  condition?: Condition;
+  @IsInt()
+  @Min(0)
+  @Max(10)
+  condition?: number;
 }

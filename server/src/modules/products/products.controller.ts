@@ -22,7 +22,7 @@ import {
 @ApiBearerAuth() // Adiciona autenticação JWT para todas as rotas deste controlador
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @Post()
   @ApiOperation({ summary: 'Criar um novo produto' })
@@ -37,6 +37,8 @@ export class ProductsController {
           size: 'M',
           school: 'Escola Exemplo',
           condition: 'NOVO',
+          price: 100.0,
+          status: 'AVAILABLE',
         },
       },
     },
@@ -110,6 +112,15 @@ export class ProductsController {
   @ApiBody({
     type: UpdateProductDto,
     description: 'Dados para atualizar um produto existente',
+    examples: {
+      example1: {
+        value: {
+          name: 'Produto Atualizado',
+          price: 150.0,
+          status: 'PENDING',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 200,
