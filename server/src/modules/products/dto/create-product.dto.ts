@@ -41,11 +41,6 @@ export class CreateProductDto {
   @IsNotEmpty()
   status: ProductStatus;
 
-  @ApiProperty({ description: 'ID do vendedor associado ao produto' })
-  @IsString()
-  @IsNotEmpty()
-  sellerId: string;
-
   @ApiProperty({
     description: 'Condição do produto (0-10)',
     minimum: 0,

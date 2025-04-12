@@ -17,6 +17,8 @@ import {
   ApiBody,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { User } from '../auth/decorators/user.decorator';
+import { User as UserPayload } from '../users/dto/user';
 
 @ApiTags('Produtos')
 @ApiBearerAuth() // Adiciona autenticação JWT para todas as rotas deste controlador
@@ -58,8 +60,8 @@ export class ProductsController {
       },
     },
   })
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  create(@Body() createProductDto: CreateProductDto, @User() user: UserPayload) {
+    return this.productsService.create(createProductDto, user.id!);
   }
 
   @Get()
