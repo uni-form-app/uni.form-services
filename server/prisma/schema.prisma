@@ -15,16 +15,17 @@ model User {
   createdAt DateTime @default(now())
   addressId String?  @unique
 
-  address         Address?  @relation(fields: [addressId], references: [id])
+  address         Address?  @relation
   orders          Order[]   @relation("BuyerOrders")
   sales           Order[]   @relation("SellerSales")
   ratingsGiven    Rating[]  @relation("UserGivenRatings")
   ratingsReceived Rating[]  @relation("UserReceivedRatings")
   productsForSale Product[]
+  Partner         Partner?
 }
 
 model Address {
-  id           String @id @default(uuid())
+  id           String  @id @default(uuid())
   street       String
   number       String
   neighborhood String
@@ -33,8 +34,10 @@ model Address {
   zipCode      String
   latitude     Float
   longitude    Float
+  userId       String? @unique
+  partnerId    String? @unique
 
-  user    User?
+  user    User?    @relation(fields: [userId], references: [id])
   partner Partner?
 }
 
@@ -43,7 +46,9 @@ model Partner {
   name      String
   addressId String?  @unique
   createdAt DateTime @default(now())
+  userId    String   @unique
 
+  user    User     @relation(fields: [userId], references: [id])
   address Address? @relation(fields: [addressId], references: [id])
   orders  Order[]
 }

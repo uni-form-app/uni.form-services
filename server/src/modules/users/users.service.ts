@@ -1,47 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from 'src/modules/users/dto/create-user';
 import { PrismaService } from '../prisma/prisma.service';
-import { ApiTags, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('users')
 @Injectable()
 export class UsersService {
-  constructor(private readonly db: PrismaService) {}
+  constructor(private readonly db: PrismaService) { }
 
-  @ApiOperation({ summary: 'Create a new user' })
-  @ApiBody({ type: CreateUserDto })
-  @ApiResponse({
-    status: 201,
-    description: 'User created successfully',
-    schema: {
-      example: {
-        id: 'uuid',
-        username: 'user',
-        email: 'user@example.com',
-        createdAt: '2025-04-10T00:00:00.000Z',
-      },
-    },
-  })
   async create(data: CreateUserDto) {
     await this.db.user.create({
       data,
     });
   }
 
-  @ApiOperation({ summary: 'Get a user by email' })
-  @ApiResponse({
-    status: 200,
-    description: 'User found',
-    schema: {
-      example: {
-        id: 'uuid',
-        username: 'user',
-        email: 'user@example.com',
-        createdAt: '2025-04-10T00:00:00.000Z',
-      },
-    },
-  })
-  @ApiResponse({ status: 404, description: 'User not found' })
   getByEmail(email: string) {
     return this.db.user.findUnique({
       select: {
@@ -55,5 +27,23 @@ export class UsersService {
         email,
       },
     });
+  }
+
+  async isPartner(id: string) {
+    const user = await this.db.user.findUnique({
+      where: { id },
+      select: {
+        Partner: {
+          select: {
+            id: true,
+          },
+        }
+      },
+    });
+
+    if (!user)
+      return false;
+
+    return !!user.Partner;
   }
 }

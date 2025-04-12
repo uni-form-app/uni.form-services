@@ -17,6 +17,8 @@ import {
   ApiBody,
   ApiParam,
 } from '@nestjs/swagger';
+import { User } from '../auth/decorators/user.decorator';
+import { User as UserPayload } from 'src/modules/users/dto/user';
 
 @ApiTags('Endereços')
 @Controller('address')
@@ -27,8 +29,8 @@ export class AddressController {
   @ApiOperation({ summary: 'Criar um novo endereço' })
   @ApiBody({ type: CreateAddressDto })
   @ApiResponse({ status: 201, description: 'Endereço criado com sucesso' })
-  create(@Body() createAddressDto: CreateAddressDto) {
-    return this.addressService.create(createAddressDto);
+  create(@Body() createAddressDto: CreateAddressDto, @User() user: UserPayload) {
+    return this.addressService.create(createAddressDto, user.id!);
   }
 
   @Get()
