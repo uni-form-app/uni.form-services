@@ -8,6 +8,7 @@ import { JwtGuard } from './modules/auth/guards/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './modules/products/products.module';
 import { PartnersModule } from './modules/partners/partners.module';
+import { AddressModule } from './modules/address/address.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PartnersModule } from './modules/partners/partners.module';
     UsersModule,
     ProductsModule,
     PartnersModule,
+    AddressModule,
   ],
   providers: [
     {
