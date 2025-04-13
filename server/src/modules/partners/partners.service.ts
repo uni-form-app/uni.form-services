@@ -5,11 +5,14 @@ import { UpdatePartnerDto } from './dto/update-partner.dto';
 
 @Injectable()
 export class PartnersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
-  async create(data: CreatePartnerDto) {
+  async create(data: CreatePartnerDto, userId: string) {
     return this.prisma.partner.create({
-      data,
+      data: {
+        ...data,
+        userId,
+      }
     });
   }
 

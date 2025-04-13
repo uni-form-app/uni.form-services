@@ -18,12 +18,14 @@ import {
   ApiBearerAuth,
   ApiParam,
 } from '@nestjs/swagger';
+import { User } from '../auth/decorators/user.decorator';
+import { User as UserPayload } from '../users/dto/user';
 
 @ApiTags('Parceiros')
 @ApiBearerAuth()
 @Controller('partners')
 export class PartnersController {
-  constructor(private readonly partnersService: PartnersService) {}
+  constructor(private readonly partnersService: PartnersService) { }
 
   @Post()
   @ApiOperation({ summary: 'Criar um novo parceiro' })
@@ -55,8 +57,8 @@ export class PartnersController {
       },
     },
   })
-  create(@Body() createPartnerDto: CreatePartnerDto) {
-    return this.partnersService.create(createPartnerDto);
+  create(@Body() createPartnerDto: CreatePartnerDto, @User() user: UserPayload) {
+    return this.partnersService.create(createPartnerDto, user.id!);
   }
 
   @Get()
