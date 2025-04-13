@@ -11,13 +11,13 @@ Este repositório contém os serviços do aplicativo uni.form, um sistema de ven
 
 ## Funcionalidades
 
-- Autenticação de usuários.
-- Criação e gerenciamento de anúncios de produtos.
-- Cadastro e gestão de parceiros (pontos de retirada).
-- Perfis de usuários com nome, localização (bairro/região) e histórico de compras e vendas.
-- Sistema de avaliação e reputação dos usuários.
-- Seleção de pontos de retirada por geolocalização.
-- Integração com sistema de pagamento para controle de comissões.
+- [X] Autenticação de usuários.
+- [X] Criação e gerenciamento de anúncios de produtos.
+- [X] Cadastro e gestão de parceiros (pontos de retirada).
+- [] Perfis de usuários com nome, localização (bairro/região) e histórico de compras e vendas.
+- [] Sistema de avaliação e reputação dos usuários.
+- [] Seleção de pontos de retirada por geolocalização.
+- [] Integração com sistema de pagamento para controle de comissões.
 
 ## Regras de negócio
 - Só usuários autenticados podem anunciar, comprar ou doar.

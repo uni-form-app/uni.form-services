@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './modules/products/products.module';
 import { PartnersModule } from './modules/partners/partners.module';
 import { AddressModule } from './modules/address/address.module';
+import { ImageModule } from './modules/image/image.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AddressModule } from './modules/address/address.module';
     ProductsModule,
     PartnersModule,
     AddressModule,
+    ImageModule,
   ],
   providers: [
     {
@@ -28,4 +30,4 @@ import { AddressModule } from './modules/address/address.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
