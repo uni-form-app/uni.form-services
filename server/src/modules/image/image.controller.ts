@@ -1,10 +1,13 @@
-import { Controller, Get, Post, Param, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Controller, Post, Param, UploadedFile,
+  UseInterceptors, BadRequestException
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageService } from './image.service';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
-import * as fs from 'fs';
+import * as fs from 'fs/promises';
 
 @ApiTags('Imagens')
 @Controller('image')
@@ -31,30 +34,40 @@ export class ImageController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: (req, file, cb) => {
+        destination: async (req, file, cb) => {
           const productId = req.params.productId;
           const dir = `./images/${productId}`;
-          if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
+
+          try {
+            await fs.mkdir(dir, { recursive: true });
+            cb(null, dir);
+          } catch (err) {
+            cb(err as Error, dir);
           }
-          cb(null, dir);
         },
         filename: (req, file, cb) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
         },
       }),
+      fileFilter: (req, file, cb) => {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!file || !allowedTypes.includes(file.mimetype)) {
+          return cb(new BadRequestException('Tipo de arquivo inválido'), false);
+        }
+        cb(null, true);
+      },
     }),
   )
-  async uploadImage(@UploadedFile() file: Express.Multer.File, @Param('productId') productId: string) {
-    return this.imageService.uploadImage(file, productId);
-  }
+  async uploadImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('productId') productId: string,
+  ) {
+    if (!file) {
+      throw new BadRequestException('Arquivo inválido ou não enviado corretamente');
+    }
 
-  @Get('product/:productId')
-  @ApiOperation({ summary: 'Listar todas as imagens de um produto' })
-  @ApiParam({ name: 'productId', description: 'ID do produto cujas imagens serão listadas' })
-  @ApiResponse({ status: 200, description: 'Lista de imagens retornada com sucesso' })
-  findByProductId(@Param('productId') productId: string) {
-    return this.imageService.findByProductId(productId);
+    const image = await this.imageService.uploadImage(file, productId);
+    return image;
   }
 }
