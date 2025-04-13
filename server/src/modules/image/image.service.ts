@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import * as fs from 'fs/promises';
+import { FileService } from './file/file.service'; // New file handling service
 
 @Injectable()
 export class ImageService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly fileService: FileService, // Injecting the new service
+  ) { }
 
   async uploadImage(file: Express.Multer.File, productId: string) {
     if (!file || !file.path) {
@@ -21,7 +24,7 @@ export class ImageService {
 
       return image;
     } catch (error) {
-      await fs.unlink(file.path);
+      await this.fileService.deleteFile(file.path); // Delegating file deletion
       throw error;
     }
   }
