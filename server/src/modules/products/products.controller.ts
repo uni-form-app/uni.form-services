@@ -21,10 +21,10 @@ import { User } from '../auth/decorators/user.decorator';
 import { User as UserPayload } from '../users/dto/user';
 
 @ApiTags('Produtos')
-@ApiBearerAuth() // Adiciona autenticação JWT para todas as rotas deste controlador
+@ApiBearerAuth()
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @Post()
   @ApiOperation({ summary: 'Criar um novo produto' })
@@ -87,7 +87,7 @@ export class ProductsController {
     },
   })
   findAll() {
-    return this.productsService.findAll();
+    return this.productsService.get();
   }
 
   @Get(':id')
@@ -109,7 +109,7 @@ export class ProductsController {
   })
   @ApiResponse({ status: 404, description: 'Produto não encontrado' })
   findOne(@Param('id') id: string) {
-    return this.productsService.findOne(id);
+    return this.productsService.getUnique(id);
   }
 
   @Put(':id')
