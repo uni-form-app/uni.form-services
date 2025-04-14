@@ -8,8 +8,8 @@ import { UsersService } from '../users/users.service';
 export class AddressService {
   constructor(
     private readonly userService: UsersService,
-    private readonly prisma: PrismaService
-  ) { }
+    private readonly prisma: PrismaService,
+  ) {}
 
   async create(data: CreateAddressDto, userId: string) {
     const isPartner = await this.userService.isPartner(userId);
@@ -17,11 +17,7 @@ export class AddressService {
     return this.prisma.address.create({
       data: {
         ...data,
-        ...(
-          isPartner
-            ? { partnerId: userId }
-            : { userId }
-        )
+        ...(isPartner ? { partnerId: userId } : { userId }),
       },
     });
   }

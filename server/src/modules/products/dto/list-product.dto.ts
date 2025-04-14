@@ -12,7 +12,11 @@ export class ListProductDto {
   @IsString()
   school?: string;
 
-  @ApiPropertyOptional({ description: 'Condição do produto', minimum: 0, maximum: 10 })
+  @ApiPropertyOptional({
+    description: 'Condição do produto',
+    minimum: 0,
+    maximum: 10,
+  })
   @ApiPropertyOptional({ description: 'Condição do produto (0-10)' })
   @IsOptional()
   @IsInt()

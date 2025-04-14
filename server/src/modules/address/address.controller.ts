@@ -23,13 +23,16 @@ import { User as UserPayload } from 'src/modules/users/dto/user';
 @ApiTags('Endereços')
 @Controller('address')
 export class AddressController {
-  constructor(private readonly addressService: AddressService) { }
+  constructor(private readonly addressService: AddressService) {}
 
   @Post()
   @ApiOperation({ summary: 'Criar um novo endereço' })
   @ApiBody({ type: CreateAddressDto })
   @ApiResponse({ status: 201, description: 'Endereço criado com sucesso' })
-  create(@Body() createAddressDto: CreateAddressDto, @User() user: UserPayload) {
+  create(
+    @Body() createAddressDto: CreateAddressDto,
+    @User() user: UserPayload,
+  ) {
     return this.addressService.create(createAddressDto, user.id!);
   }
 

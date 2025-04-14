@@ -9,4 +9,4 @@ import { FileService } from './file/file.service'; // Importing FileService
   providers: [ImageService, FileService], // Registering FileService
   controllers: [ImageController],
 })
-export class ImageModule { }
+export class ImageModule {}

@@ -7,7 +7,7 @@ export class ImageService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly fileService: FileService, // Injecting the new service
-  ) { }
+  ) {}
 
   async uploadImage(file: Express.Multer.File, productId: string) {
     if (!file || !file.path) {

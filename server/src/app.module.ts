@@ -30,4 +30,4 @@ import { ImageModule } from './modules/image/image.module';
     },
   ],
 })
-export class AppModule { }
+export class AppModule {}

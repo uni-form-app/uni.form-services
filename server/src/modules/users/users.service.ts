@@ -6,7 +6,7 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('users')
 @Injectable()
 export class UsersService {
-  constructor(private readonly db: PrismaService) { }
+  constructor(private readonly db: PrismaService) {}
 
   async create(data: CreateUserDto) {
     await this.db.user.create({
@@ -37,12 +37,11 @@ export class UsersService {
           select: {
             id: true,
           },
-        }
+        },
       },
     });
 
-    if (!user)
-      return false;
+    if (!user) return false;
 
     return !!user.Partner;
   }

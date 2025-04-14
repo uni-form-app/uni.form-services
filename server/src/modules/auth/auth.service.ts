@@ -14,7 +14,7 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   async signIn(data: SignInDto) {
     const { email, password } = data;

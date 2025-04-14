@@ -24,7 +24,7 @@ import { User as UserPayload } from '../users/dto/user';
 @ApiBearerAuth() // Adiciona autenticação JWT para todas as rotas deste controlador
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) { }
+  constructor(private readonly productsService: ProductsService) {}
 
   @Post()
   @ApiOperation({ summary: 'Criar um novo produto' })
@@ -60,7 +60,10 @@ export class ProductsController {
       },
     },
   })
-  create(@Body() createProductDto: CreateProductDto, @User() user: UserPayload) {
+  create(
+    @Body() createProductDto: CreateProductDto,
+    @User() user: UserPayload,
+  ) {
     return this.productsService.create(createProductDto, user.id!);
   }
 

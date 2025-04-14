@@ -25,7 +25,7 @@ import { User as UserPayload } from '../users/dto/user';
 @ApiBearerAuth()
 @Controller('partners')
 export class PartnersController {
-  constructor(private readonly partnersService: PartnersService) { }
+  constructor(private readonly partnersService: PartnersService) {}
 
   @Post()
   @ApiOperation({ summary: 'Criar um novo parceiro' })
@@ -57,7 +57,10 @@ export class PartnersController {
       },
     },
   })
-  create(@Body() createPartnerDto: CreatePartnerDto, @User() user: UserPayload) {
+  create(
+    @Body() createPartnerDto: CreatePartnerDto,
+    @User() user: UserPayload,
+  ) {
     return this.partnersService.create(createPartnerDto, user.id!);
   }
 

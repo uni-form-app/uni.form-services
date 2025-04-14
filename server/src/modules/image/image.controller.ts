@@ -1,22 +1,35 @@
 import {
-  Controller, Post, Param, UploadedFile,
-  UseInterceptors, BadRequestException
+  Controller,
+  Post,
+  Param,
+  UploadedFile,
+  UseInterceptors,
+  BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageService } from './image.service';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiParam,
+} from '@nestjs/swagger';
 import * as fs from 'fs/promises';
 
 @ApiTags('Imagens')
 @Controller('image')
 export class ImageController {
-  constructor(private readonly imageService: ImageService) { }
+  constructor(private readonly imageService: ImageService) {}
 
   @Post('upload/:productId')
   @ApiOperation({ summary: 'Fazer upload de uma imagem para um produto' })
-  @ApiParam({ name: 'productId', description: 'ID do produto ao qual a imagem será associada' })
+  @ApiParam({
+    name: 'productId',
+    description: 'ID do produto ao qual a imagem será associada',
+  })
   @ApiBody({
     description: 'Arquivo de imagem a ser enviado',
     schema: {
@@ -46,12 +59,18 @@ export class ImageController {
           }
         },
         filename: (req, file, cb) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
           cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
         },
       }),
       fileFilter: (req, file, cb) => {
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        const allowedTypes = [
+          'image/jpeg',
+          'image/png',
+          'image/gif',
+          'image/webp',
+        ];
         if (!file || !allowedTypes.includes(file.mimetype)) {
           return cb(new BadRequestException('Tipo de arquivo inválido'), false);
         }
@@ -64,7 +83,9 @@ export class ImageController {
     @Param('productId') productId: string,
   ) {
     if (!file) {
-      throw new BadRequestException('Arquivo inválido ou não enviado corretamente');
+      throw new BadRequestException(
+        'Arquivo inválido ou não enviado corretamente',
+      );
     }
 
     const image = await this.imageService.uploadImage(file, productId);

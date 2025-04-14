@@ -9,4 +9,4 @@ import { UsersModule } from '../users/users.module';
   controllers: [AddressController],
   providers: [AddressService],
 })
-export class AddressModule { }
+export class AddressModule {}
