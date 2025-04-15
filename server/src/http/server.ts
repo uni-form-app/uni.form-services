@@ -1,4 +1,4 @@
-import { config } from "../config";
+import { config } from "../config/env";
 import "./app";
 import { server } from "./http";
 

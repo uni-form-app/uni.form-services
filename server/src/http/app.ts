@@ -1,6 +1,5 @@
+import { routers } from "../routes";
 import { app } from "./http";
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-}
-);
+app
+  .use("/api/v1/", routers)
