@@ -5,7 +5,6 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
   try {
     const { body: { username, password } } = req;
 
-    console.log("signIn", username, password);
     const user = await authService.signIn(username, password);
 
     res.status(200).json({ message: "Sign in successful", user });
