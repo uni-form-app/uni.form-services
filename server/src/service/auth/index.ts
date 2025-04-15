@@ -15,3 +15,5 @@ export const signUp = async (email: string, password: string, username: string) 
 
   return user;
 }
+
+export * as authService from ".";
