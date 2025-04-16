@@ -23,7 +23,7 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
 
 export const signUp = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password, username } = req.body;
+    const { body: { email, password, username } } = req;
     const user = await authService.signUp(email, password, username);
 
     const token = generateToken(user);
