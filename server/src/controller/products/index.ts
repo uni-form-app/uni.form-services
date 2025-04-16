@@ -16,8 +16,9 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
 
 export const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { query: { sortBy, order, search } } = req;
-    const products = await productService.get({ sortBy, order, search });
+    const { query: { ...filters } } = req;
+
+    const products = await productService.get({ ...filters });
 
     res.status(200).json(products);
   } catch (error) {
