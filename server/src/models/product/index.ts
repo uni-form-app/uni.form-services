@@ -11,7 +11,11 @@ export const create = z.object({
 export const update = create.partial();
 
 export const get = z.object({
-
+  query: z.object({
+    sortBy: z.enum(["price", "createdAt"]).optional(),
+    order: z.enum(["asc", "desc"]).optional(),
+    search: z.string().optional(),
+  }),
 })
 
 export interface Product {

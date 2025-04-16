@@ -1,5 +1,5 @@
 import pg from "../../libs/prisma";
-import { Create } from "./types";
+import { Create, Get } from "./types";
 
 export const create = async (args: Create.Args) => {
   const { ...data } = args;
@@ -10,8 +10,20 @@ export const create = async (args: Create.Args) => {
   return product;
 };
 
-export const get = async () => {
-  return await pg.product.findMany();
+export const get = async (args: Get.Args) => {
+  const { sortBy, order, search } = args;
+
+  return await pg.product.findMany({
+    where: {
+      OR: [
+        { title: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+      ],
+    },
+    orderBy: {
+      [sortBy || "createdAt"]: order || "desc",
+    },
+  });
 };
 
 export const getById = async (id: string) => {
