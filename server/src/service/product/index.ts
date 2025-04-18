@@ -15,14 +15,17 @@ export const get = async (args: Get.Args) => {
 
   return await pg.product.findMany({
     where: {
-      OR: [
-        { title: { contains: search, mode: "insensitive" } },
-        { description: { contains: search, mode: "insensitive" } },
-      ],
+      ...(search && {
+        OR: [
+          { name: { contains: search, mode: "insensitive" } },
+          { description: { contains: search, mode: "insensitive" } },
+          { school: { contains: search, mode: "insensitive" } },
+        ],
+      })
     },
     orderBy: {
       [sortBy || "createdAt"]: order || "desc",
-    },
+    }
   });
 };
 

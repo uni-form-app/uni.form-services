@@ -1,7 +1,7 @@
 import pg from "../../libs/prisma";
 
 export const getUnique = async (username: string) => {
-  const user = await pg.user.findUniqueOrThrow({
+  const user = await pg.user.findUnique({
     where: { username },
   })
   return user;

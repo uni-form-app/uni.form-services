@@ -1,11 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import { productService } from "../../service/product";
+import { Req } from "../../utils/types";
+import { Create, Get, Update } from "../../models/product";
 
-export const create = async (req: Request, res: Response, next: NextFunction) => {
+export const create = async (req: Req<Create>, res: Response, next: NextFunction) => {
   try {
-    const { body: { ...data } } = req;
+    const { body: { ...data }, user } = req;
 
-    await productService.create(data);
+    await productService.create({
+      ...data,
+      sellerId: user.id,
+    });
 
     res.status(201).json({ message: "product created" });
 
@@ -14,7 +19,7 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const get = async (req: Request, res: Response, next: NextFunction) => {
+export const get = async (req: Req<Get>, res: Response, next: NextFunction) => {
   try {
     const { query: { ...filters } } = req;
 
@@ -38,11 +43,11 @@ export const getUnique = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
-export const update = async (req: Request, res: Response, next: NextFunction) => {
+export const update = async (req: Req<Update>, res: Response, next: NextFunction) => {
   try {
-    const { params: { id }, body: { ...data } } = req;
+    const { params: { productId }, body: { ...data } } = req;
 
-    await productService.update(id, data);
+    await productService.update(productId, data);
 
     res.status(200).json({ message: "product updated" });
   } catch (error) {
