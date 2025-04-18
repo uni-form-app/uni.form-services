@@ -3,26 +3,35 @@ version: '3.8'
 services:
   db:
     container_name: postgres
-    image: postgres:latest
+    image: bitnami/postgresql:16
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: photoshare
+      POSTGRES_DB: uniform
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - uniform-network
 
   pgadmin:
     container_name: pgadmin
-    image: dpage/pgadmin4:latest
+    image: dpage/pgadmin4:9.2
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "80:80"
+    restart: always
     depends_on:
       - db
+    networks:
+      - uniform-network
 
 volumes:
   postgres_data:
+
+networks:
+  uniform-network:
+    driver: bridge
