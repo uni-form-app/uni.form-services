@@ -6,6 +6,6 @@ import { productController } from "../../controller/products";
 export const productRouter = Router()
   .post("/", validate(schema.create), productController.create)
   .get("/", validate(schema.get), productController.get)
-  .get("/:id", productController.getUnique)
-  .put("/:id", validate(schema.update), productController.update)
-  .delete("/:id", productController.remove);
+  .get("/:productId", validate(schema.getUnique), productController.getUnique)
+  .put("/:productId", validate(schema.update), productController.update)
+  .delete("/:productId", validate(schema.remove), productController.remove);

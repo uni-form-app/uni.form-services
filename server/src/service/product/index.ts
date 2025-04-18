@@ -30,7 +30,7 @@ export const get = async (args: Get.Args) => {
 };
 
 export const getById = async (id: string) => {
-  return await pg.product.findUniqueOrThrow({
+  return await pg.product.findUnique({
     where: { id },
   });
 };

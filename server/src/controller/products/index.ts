@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { productService } from "../../service/product";
 import { Req } from "../../utils/types";
-import { Create, Get, Update } from "../../models/product";
+import { Create, Get, GetUnique, Remove, Update } from "../../models/product";
 
 export const create = async (req: Req<Create>, res: Response, next: NextFunction) => {
   try {
@@ -31,11 +31,16 @@ export const get = async (req: Req<Get>, res: Response, next: NextFunction) => {
   }
 };
 
-export const getUnique = async (req: Request, res: Response, next: NextFunction) => {
+export const getUnique = async (req: Req<GetUnique>, res: Response, next: NextFunction) => {
   try {
-    const { params: { id } } = req;
+    const { params: { productId } } = req;
 
-    const product = await productService.getById(id);
+    const product = await productService.getById(productId);
+
+    if (!product) {
+      res.status(404).json({ message: "product not found" });
+      return;
+    }
 
     res.status(200).json(product);
   } catch (error) {
@@ -55,11 +60,11 @@ export const update = async (req: Req<Update>, res: Response, next: NextFunction
   }
 };
 
-export const remove = async (req: Request, res: Response, next: NextFunction) => {
+export const remove = async (req: Req<Remove>, res: Response, next: NextFunction) => {
   try {
-    const { params: { id } } = req;
+    const { params: { productId } } = req;
 
-    await productService.remove(id);
+    await productService.remove(productId);
 
     res.status(200).json({ message: "product deleted" });
   } catch (error) {

@@ -28,6 +28,18 @@ export const get = z.object({
   }),
 })
 
+export const getUnique = z.object({
+  params: z.object({
+    productId: z.string().uuid("Invalid product id"),
+  }),
+});
+
+export const remove = z.object({
+  params: z.object({
+    productId: z.string().uuid("Invalid product id"),
+  }),
+});
+
 export interface Product {
   name: string,
   description: string,
@@ -42,3 +54,5 @@ export interface Product {
 export type Create = z.infer<typeof create>;
 export type Update = z.infer<typeof update>;
 export type Get = z.infer<typeof get>;
+export type GetUnique = z.infer<typeof getUnique>;
+export type Remove = z.infer<typeof remove>;
