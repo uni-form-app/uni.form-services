@@ -4,7 +4,7 @@ Este repositório contém os serviços do aplicativo uni.form, um sistema de ven
 ## Tecnologias
 - **TypeScript**
 - **Node.js**
-- **Nest.js**
+- **Express**
 - **Prisma**
 - **PostgreSQL**
 - **Docker**

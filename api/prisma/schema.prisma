@@ -16,6 +16,7 @@ model User {
 
   products Product[]
   orders   Order[]
+  Partner  Partner[]
 }
 
 model Partner {
@@ -25,8 +26,10 @@ model Partner {
   address   String
   latitude  Float
   longitude Float
+  ownerId   String
   createdAt DateTime @default(now()) @db.Timestamptz
 
+  owner  User    @relation(fields: [ownerId], references: [id])
   orders Order[]
 }
 

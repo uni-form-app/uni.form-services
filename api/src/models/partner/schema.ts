@@ -5,20 +5,13 @@ export const create = z.object({
     name: z.string().min(1, { message: 'Name is required' }),
     city: z.string().min(1, { message: 'City is required' }),
     address: z.string().min(1, { message: 'Address is required' }),
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
+    latitude: z.number().min(-90).max(90),
+    longitude: z.number().min(-180).max(180),
   }),
 })
 
 export const update = z.object({
-  body: z.object({
-    id: z.string().uuid(),
-    name: z.string().min(1, { message: 'Name is required' }),
-    city: z.string().min(1, { message: 'City is required' }),
-    address: z.string().min(1, { message: 'Address is required' }),
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
-  }),
+  body: create.shape.body.partial(),
   params: z.object({
     partnerId: z.string().uuid(),
   }),

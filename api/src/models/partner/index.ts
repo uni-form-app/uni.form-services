@@ -7,6 +7,7 @@ export interface Partner {
   address: string;
   latitude: number;
   longitude: number;
+  ownerId: string;
 }
 
 export type create = z.infer<typeof schema.create>;
