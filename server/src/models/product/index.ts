@@ -2,7 +2,6 @@ import { ProductStatus } from "@prisma/client";
 import * as schema from "./schemas";
 import { z } from "zod";
 
-
 export interface Product {
   name: string,
   description: string,
