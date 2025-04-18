@@ -38,7 +38,7 @@ enum ProductStatus {
 
 model Product {
   id          String        @id @default(uuid())
-  title       String
+  name        String
   description String
   size        String
   school      String
