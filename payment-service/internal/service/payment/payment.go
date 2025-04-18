@@ -1,6 +1,8 @@
 package paymentService
 
-import "log"
+import (
+	"log"
+)
 
 type PaymentService struct{}
 
@@ -8,7 +10,12 @@ func NewPaymentService() *PaymentService {
 	return &PaymentService{}
 }
 
-func (s *PaymentService) ProcessPayment(message string) {
-	// Lógica para processar o pagamento
-	log.Printf("Processando pagamento com a mensagem: %s", message)
+type PaymentPayload struct {
+	OrderID string  `json:"orderId" validate:"required,uuid"`
+	BuyerID string  `json:"buyerId" validate:"required,uuid"`
+	Amount  float64 `json:"amount" validate:"required,gt=0"`
+}
+
+func (s *PaymentService) ProcessPayment(payload PaymentPayload) {
+	log.Printf("Processing payment for Order ID: %s, Buyer ID: %s, Amount: %.2f\n", payload.OrderID, payload.BuyerID, payload.Amount)
 }

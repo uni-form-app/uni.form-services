@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"main/cmd/factory"
+	"main/config"
+)
 
 func main() {
-	fmt.Println("Payment Service")
+	if err := config.Load(); err != nil {
+		panic(err)
+	}
+
+	factory := factory.NewFactory()
+
+	factory.Run()
 }
