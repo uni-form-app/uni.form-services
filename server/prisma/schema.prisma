@@ -12,7 +12,7 @@ model User {
   username  String   @unique
   email     String   @unique
   password  String
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz
 
   products Product[]
   orders   Order[]
@@ -25,7 +25,7 @@ model Partner {
   address   String
   latitude  Float
   longitude Float
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz
 
   orders Order[]
 }
@@ -45,7 +45,7 @@ model Product {
   condition   Int
   price       Float
   status      ProductStatus @default(AVAILABLE)
-  createdAt   DateTime      @default(now())
+  createdAt   DateTime      @default(now()) @db.Timestamptz
 
   sellerId      String
   seller        User            @relation(fields: [sellerId], references: [id])
@@ -73,8 +73,8 @@ model Order {
   buyerId     String
   partnerId   String
   status      OrderStatus @default(PENDING)
-  createdAt   DateTime    @default(now())
-  confirmedAt DateTime?
+  createdAt   DateTime    @default(now()) @db.Timestamptz
+  confirmedAt DateTime?   @db.Timestamptz
 
   product Product @relation(fields: [productId], references: [id])
   buyer   User    @relation(fields: [buyerId], references: [id])
