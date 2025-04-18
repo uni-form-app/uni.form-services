@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validate } from "../../middleware/validator";
-import * as schema from '../../models/product';
+import * as schema from '../../models/product/schemas';
 import { productController } from "../../controller/products";
 
 export const productRouter = Router()

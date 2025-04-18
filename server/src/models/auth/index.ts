@@ -1,16 +1,5 @@
 import { z } from "zod";
+import * as schema from "./schema";
 
-export const login = z.object({
-  body: z.object({
-    username: z.string().min(3).max(20),
-    password: z.string().min(6).max(20),
-  }),
-});
-
-export const create = z.object({
-  body: z.object({
-    username: z.string().min(3).max(20),
-    email: z.string().email(),
-    password: z.string().min(6).max(20),
-  }),
-});
+export type Login = z.infer<typeof schema.login>;
+export type Create = z.infer<typeof schema.create>;
