@@ -8,29 +8,72 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  email     String   @unique
+  id        String    @id @default(dbgenerated("gen_random_uuid()"))
+  username  String    @unique
+  email     String    @unique
   password  String
-  createdAt DateTime @default(now()) @db.Timestamptz
-
-  products Product[]
-  orders   Order[]
-  Partner  Partner[]
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  orders    Order[]
+  Partner   Partner[]
+  products  Product[]
 }
 
 model Partner {
-  id        String   @id @default(uuid())
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
   name      String
   city      String
   address   String
   latitude  Float
   longitude Float
   ownerId   String
-  createdAt DateTime @default(now()) @db.Timestamptz
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  orders    Order[]
+  owner     User     @relation(fields: [ownerId], references: [id])
+}
 
-  owner  User    @relation(fields: [ownerId], references: [id])
-  orders Order[]
+model Product {
+  id            String          @id @default(dbgenerated("gen_random_uuid()"))
+  name          String
+  description   String
+  size          String
+  school        String
+  condition     Int
+  price         Float
+  status        ProductStatus   @default(AVAILABLE)
+  createdAt     DateTime        @default(now()) @db.Timestamptz(6)
+  sellerId      String
+  order         Order?
+  seller        User            @relation(fields: [sellerId], references: [id])
+  ProductImages ProductImages[]
+}
+
+model ProductImages {
+  id        String  @id @default(dbgenerated("gen_random_uuid()"))
+  productId String
+  url       String
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Order {
+  id               String           @id @default(dbgenerated("gen_random_uuid()"))
+  productId        String           @unique
+  buyerId          String
+  partnerId        String
+  status           OrderStatus      @default(PENDING)
+  createdAt        DateTime         @default(now()) @db.Timestamptz(6)
+  confirmedAt      DateTime?        @db.Timestamptz(6)
+  buyer            User             @relation(fields: [buyerId], references: [id])
+  partner          Partner          @relation(fields: [partnerId], references: [id])
+  product          Product          @relation(fields: [productId], references: [id])
+  PaymentHistories PaymentHistory[]
+}
+
+model PaymentHistory {
+  id        String        @id @default(dbgenerated("gen_random_uuid()"))
+  orderId   String
+  createdAt DateTime      @default(now()) @db.Timestamptz(6)
+  status    PaymentStatus @default(PENDING)
+  order     Order         @relation(fields: [orderId], references: [id])
 }
 
 enum ProductStatus {
@@ -39,63 +82,14 @@ enum ProductStatus {
   SOLD
 }
 
-model Product {
-  id          String        @id @default(uuid())
-  name        String
-  description String
-  size        String
-  school      String
-  condition   Int
-  price       Float
-  status      ProductStatus @default(AVAILABLE)
-  createdAt   DateTime      @default(now()) @db.Timestamptz
-
-  sellerId      String
-  seller        User            @relation(fields: [sellerId], references: [id])
-  order         Order?
-  ProductImages ProductImages[]
-}
-
-model ProductImages {
-  id        String @id @default(uuid())
-  productId String
-  url       String
-
-  product Product @relation(fields: [productId], references: [id])
-}
-
 enum OrderStatus {
   PENDING
   CONFIRMED
   CANCELLED
 }
 
-model Order {
-  id          String      @id @default(uuid())
-  productId   String      @unique
-  buyerId     String
-  partnerId   String
-  status      OrderStatus @default(PENDING)
-  createdAt   DateTime    @default(now()) @db.Timestamptz
-  confirmedAt DateTime?   @db.Timestamptz
-
-  product          Product          @relation(fields: [productId], references: [id])
-  buyer            User             @relation(fields: [buyerId], references: [id])
-  partner          Partner          @relation(fields: [partnerId], references: [id])
-  PaymentHistories PaymentHistory[]
-}
-
 enum PaymentStatus {
   PENDING
   COMPLETED
   FAILED
-}
-
-model PaymentHistory {
-  id        String        @id @default(uuid())
-  orderId   String
-  createdAt DateTime      @default(now()) @db.Timestamptz
-  status    PaymentStatus @default(PENDING)
-
-  order Order @relation(fields: [orderId], references: [id])
 }
