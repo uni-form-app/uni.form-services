@@ -4,7 +4,7 @@ export namespace Create {
   export type Args = Order;
 }
 
-export namespace Get {
+export namespace GetUnique {
   export type Args = {
     orderId: string;
   }

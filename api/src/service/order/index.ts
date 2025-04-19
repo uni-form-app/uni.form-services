@@ -2,9 +2,9 @@ import { config } from "../../config/env";
 import pg from "../../libs/prisma";
 import { rabbit } from "../../libs/rabbitmq";
 import { productService } from "../product";
-import { Create, Get, Pay } from "./types";
+import { Create, GetUnique, Pay } from "./types";
 
-export const get = async (args: Get.Args) => {
+export const getUnique = async (args: GetUnique.Args) => {
   const { orderId } = args;
 
   const order = await pg.order.findFirst({
@@ -31,7 +31,7 @@ export const create = async (args: Create.Args) => {
 export const pay = async (args: Pay.Args) => {
   const { orderId } = args;
 
-  const order = await get({ orderId });
+  const order = await getUnique({ orderId });
   if (!order) {
     throw new Error("Order not found");
   }
