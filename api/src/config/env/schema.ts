@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const rabbitTopcs = z.object({
-  ORDER_CREATED: z.string().default('order.created'),
+  RABBIT_ORDER_CREATED: z.string().default('order.created'),
 })
 
 const rabbitMQ = z.object({

@@ -11,6 +11,6 @@ export const config = schema.env.parse({
 export const rabbitMQ = schema.rabbitMQ.parse({
   URI: process.env.RABBIT_URI,
   TOPICS: {
-    ORDER_CREATED: process.env.ORDER_CREATED,
+    ORDER_CREATED: process.env.RABBIT_ORDER_CREATED,
   }
 })
