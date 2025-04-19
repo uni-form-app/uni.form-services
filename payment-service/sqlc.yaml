@@ -1,0 +1,21 @@
+version: "2"
+
+sql:
+- queries: "pkg/sqlc/config/queries.sql"
+  schema: "pkg/sqlc/config/migrations/"
+  engine: "postgresql"
+  gen:
+    go: 
+      package: "models"
+      out: "pkg/sqlc/models"
+      sql_package: "pgx/v5"
+      emit_pointers_for_null_types: true
+      overrides:
+        - db_type: "pg_catalog.numeric"
+          go_type:
+            type: "float64"
+            pointer: true
+  database:
+    uri: ${DB_URI}
+  rules:
+    - sqlc/db-prepare

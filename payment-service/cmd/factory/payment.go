@@ -44,7 +44,6 @@ func (f *Factory) Run() {
 		wg.Add(1)
 		go func(message string) {
 			defer wg.Done()
-			fmt.Printf("Processing message: %s\n", message)
 			paymentHandler.HandlePaymentMessage(message)
 		}(string(msg.Body))
 	}
