@@ -2,14 +2,15 @@ package paymentService
 
 import (
 	"context"
-	"fmt"
 	"main/internal/repository"
+	"main/pkg/logger"
 	"main/pkg/sqlc/models"
 	"time"
 )
 
 type PaymentService struct {
 	repository repository.Repository
+	logger     *logger.Logger
 }
 
 func NewPaymentService(
@@ -17,6 +18,7 @@ func NewPaymentService(
 ) *PaymentService {
 	return &PaymentService{
 		repository: repo,
+		logger:     logger.New("Payment Service"),
 	}
 }
 
@@ -25,11 +27,11 @@ type PaymentPayload struct {
 }
 
 func (s *PaymentService) ProcessPayment(payload PaymentPayload) error {
-	fmt.Printf("Processing payment for order ID: %s\n", payload.OrderID)
+	s.logger.Info("Processing payment for order ID: " + payload.OrderID)
 	timeToProcess := 15 // seconds
 
 	time.Sleep(time.Duration(timeToProcess) * time.Second)
-	fmt.Printf("Payment processed for order ID: %s\n", payload.OrderID)
+	s.logger.Info("Payment processed for order ID: " + payload.OrderID)
 
 	ctx := context.Background()
 
@@ -55,9 +57,10 @@ func (s *PaymentService) ProcessPayment(payload PaymentPayload) error {
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		return fmt.Errorf("failed to commit transaction: %w", err)
+		_ = tx.Rollback(ctx)
+		return err
 	}
 
-	fmt.Printf("Payment processed for order ID: %s\n", payload.OrderID)
+	s.logger.Success("Payment processed successfully for order ID: " + payload.OrderID)
 	return nil
 }
