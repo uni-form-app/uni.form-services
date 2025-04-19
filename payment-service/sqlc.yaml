@@ -15,6 +15,11 @@ sql:
           go_type:
             type: "float64"
             pointer: true
+        - db_type: "pg_catalog.timestamptz"
+          go_type:
+            type: "time.Time"
+            pointer: true
+          nullable: true
   database:
     uri: ${DB_URI}
   rules:

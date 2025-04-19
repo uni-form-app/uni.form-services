@@ -40,9 +40,12 @@ func (s *PaymentService) ProcessPayment(payload PaymentPayload) error {
 		return err
 	}
 
+	now := time.Now()
+
 	if err := tx.UpdateOrder(ctx, models.UpdateOrderParams{
-		ID:     payload.OrderID,
-		Status: "PAYMENT_CONFIRMED",
+		ID:          payload.OrderID,
+		Status:      "PAYMENT_CONFIRMED",
+		ConfirmedAt: &now,
 	}); err != nil {
 		_ = tx.Rollback(ctx)
 		return err

@@ -7,6 +7,7 @@ package models
 import (
 	"database/sql/driver"
 	"fmt"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -106,7 +107,7 @@ type Order struct {
 	PartnerId   string
 	Status      OrderStatus
 	CreatedAt   pgtype.Timestamptz
-	ConfirmedAt pgtype.Timestamptz
+	ConfirmedAt *time.Time
 }
 
 type PaymentHistory struct {

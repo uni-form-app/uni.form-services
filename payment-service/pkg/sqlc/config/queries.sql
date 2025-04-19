@@ -9,6 +9,7 @@ VALUES
 UPDATE
   public."Order"
 SET
-  status = $1
+  status = $1,
+  "confirmedAt" = $2
 WHERE
-  id = $2;
+  id = $3;

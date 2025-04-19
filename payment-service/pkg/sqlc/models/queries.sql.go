@@ -7,6 +7,7 @@ package models
 
 import (
 	"context"
+	"time"
 )
 
 const createHistory = `-- name: CreateHistory :exec
@@ -31,17 +32,19 @@ const updateOrder = `-- name: UpdateOrder :exec
 UPDATE
   public."Order"
 SET
-  status = $1
+  status = $1,
+  "confirmedAt" = $2
 WHERE
-  id = $2
+  id = $3
 `
 
 type UpdateOrderParams struct {
-	Status interface{}
-	ID     string
+	Status      interface{}
+	ConfirmedAt *time.Time
+	ID          string
 }
 
 func (q *Queries) UpdateOrder(ctx context.Context, arg UpdateOrderParams) error {
-	_, err := q.db.Exec(ctx, updateOrder, arg.Status, arg.ID)
+	_, err := q.db.Exec(ctx, updateOrder, arg.Status, arg.ConfirmedAt, arg.ID)
 	return err
 }
