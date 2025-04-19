@@ -5,12 +5,58 @@
 package models
 
 import (
+	"database/sql/driver"
+	"fmt"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
+
+type PaymentStatus string
+
+const (
+	PaymentStatusPENDING   PaymentStatus = "PENDING"
+	PaymentStatusCOMPLETED PaymentStatus = "COMPLETED"
+	PaymentStatusFAILED    PaymentStatus = "FAILED"
+)
+
+func (e *PaymentStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = PaymentStatus(s)
+	case string:
+		*e = PaymentStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for PaymentStatus: %T", src)
+	}
+	return nil
+}
+
+type NullPaymentStatus struct {
+	PaymentStatus PaymentStatus
+	Valid         bool // Valid is true if PaymentStatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullPaymentStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.PaymentStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.PaymentStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullPaymentStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.PaymentStatus), nil
+}
 
 type PaymentHistory struct {
 	ID        string
 	OrderId   string
 	CreatedAt pgtype.Timestamptz
-	Status    interface{}
+	Status    PaymentStatus
 }

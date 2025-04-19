@@ -2,12 +2,19 @@ package paymentService
 
 import (
 	"log"
+	"main/internal/repository"
 )
 
-type PaymentService struct{}
+type PaymentService struct {
+	repository repository.Repository
+}
 
-func NewPaymentService() *PaymentService {
-	return &PaymentService{}
+func NewPaymentService(
+	repo repository.Repository,
+) *PaymentService {
+	return &PaymentService{
+		repository: repo,
+	}
 }
 
 type PaymentPayload struct {

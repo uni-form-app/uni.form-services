@@ -1,13 +1,17 @@
 package factory
 
 import (
+	"context"
 	"fmt"
 	"main/config"
 	paymentHandler "main/internal/handler/payment"
 	paymentService "main/internal/service/payment"
 	"main/pkg/rabbitmq"
+	"main/pkg/sqlc/models"
 	"main/pkg/validator"
 	"sync"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Factory struct {
@@ -27,13 +31,20 @@ func (f *Factory) Run() {
 		return
 	}
 
+	dbpool, err := pgxpool.New(context.Background(), config.Env.Postgres.URI)
+	if err != nil {
+		panic(err)
+	}
+
+	db := models.New(dbpool)
+
 	msgs, err := rabbit.ConsumeQueue(f.config.Rabbit.Topics.ProcessPayment)
 	if err != nil {
 		fmt.Println("Error consuming RabbitMQ queue:", err)
 		return
 	}
 
-	paymentService := paymentService.NewPaymentService()
+	paymentService := paymentService.NewPaymentService(db)
 	validator := validator.New()
 
 	paymentHandler := paymentHandler.NewPaymentHandler(paymentService, validator)

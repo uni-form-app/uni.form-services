@@ -5,3 +5,5 @@ CREATE TABLE IF NOT EXISTS public."PaymentHistory" (
   "createdAt" timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
   status "PaymentStatus" NOT NULL DEFAULT 'PENDING' :: "PaymentStatus"
 );
+
+CREATE TYPE public."PaymentStatus" AS ENUM ('PENDING', 'COMPLETED', 'FAILED');
