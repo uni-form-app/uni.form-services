@@ -1,8 +1,10 @@
 package paymentService
 
 import (
-	"log"
+	"context"
 	"main/internal/repository"
+	"main/pkg/sqlc/models"
+	"time"
 )
 
 type PaymentService struct {
@@ -22,5 +24,12 @@ type PaymentPayload struct {
 }
 
 func (s *PaymentService) ProcessPayment(payload PaymentPayload) {
-	log.Printf("Processing payment for Order ID: %s", payload.OrderID)
+	timeToProcess := 15 // seconds
+
+	time.Sleep(time.Duration(timeToProcess) * time.Second)
+
+	s.repository.CreateHistory(context.Background(), models.CreateHistoryParams{
+		OrderId: payload.OrderID,
+		Status:  "COMPLETED",
+	})
 }
