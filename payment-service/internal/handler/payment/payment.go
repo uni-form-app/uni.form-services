@@ -34,6 +34,7 @@ func (h *PaymentHandler) validateMessage(payload string) (payment *paymentServic
 }
 
 func (h *PaymentHandler) HandlePaymentMessage(message string) {
+	fmt.Printf("Mensagem recebida: %s\n", message)
 	paymentMessage, err := h.validateMessage(message)
 	if err != nil {
 		fmt.Printf("Erro ao decodificar a mensagem: %v", err)

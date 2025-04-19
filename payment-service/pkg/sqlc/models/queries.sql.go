@@ -26,3 +26,22 @@ func (q *Queries) CreateHistory(ctx context.Context, arg CreateHistoryParams) er
 	_, err := q.db.Exec(ctx, createHistory, arg.OrderId, arg.Status)
 	return err
 }
+
+const updateOrder = `-- name: UpdateOrder :exec
+UPDATE
+  public."Order"
+SET
+  status = $1
+WHERE
+  id = $2
+`
+
+type UpdateOrderParams struct {
+	Status interface{}
+	ID     string
+}
+
+func (q *Queries) UpdateOrder(ctx context.Context, arg UpdateOrderParams) error {
+	_, err := q.db.Exec(ctx, updateOrder, arg.Status, arg.ID)
+	return err
+}

@@ -7,4 +7,5 @@ import (
 
 type Repository interface {
 	CreateHistory(ctx context.Context, params models.CreateHistoryParams) error
+	UpdateOrder(ctx context.Context, params models.UpdateOrderParams) error
 }
