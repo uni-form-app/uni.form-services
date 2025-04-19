@@ -6,3 +6,9 @@ export const create = z.object({
     partnerId: z.string().uuid(),
   }),
 })
+
+export const pay = z.object({
+  params: z.object({
+    orderId: z.string().uuid(),
+  })
+})
