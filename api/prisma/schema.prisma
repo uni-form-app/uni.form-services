@@ -79,7 +79,23 @@ model Order {
   createdAt   DateTime    @default(now()) @db.Timestamptz
   confirmedAt DateTime?   @db.Timestamptz
 
-  product Product @relation(fields: [productId], references: [id])
-  buyer   User    @relation(fields: [buyerId], references: [id])
-  partner Partner @relation(fields: [partnerId], references: [id])
+  product          Product          @relation(fields: [productId], references: [id])
+  buyer            User             @relation(fields: [buyerId], references: [id])
+  partner          Partner          @relation(fields: [partnerId], references: [id])
+  PaymentHistories PaymentHistory[]
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model PaymentHistory {
+  id        String        @id @default(uuid())
+  orderId   String
+  createdAt DateTime      @default(now()) @db.Timestamptz
+  status    PaymentStatus @default(PENDING)
+
+  order Order @relation(fields: [orderId], references: [id])
 }
