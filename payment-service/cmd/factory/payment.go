@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"main/config"
 	paymentHandler "main/internal/handler/payment"
+	"main/internal/repository"
 	paymentService "main/internal/service/payment"
 	"main/pkg/rabbitmq"
-	"main/pkg/sqlc/models"
 	"main/pkg/validator"
 	"sync"
 
@@ -36,15 +36,13 @@ func (f *Factory) Run() {
 		panic(err)
 	}
 
-	db := models.New(dbpool)
-
 	msgs, err := rabbit.ConsumeQueue(f.config.Rabbit.Topics.ProcessPayment)
 	if err != nil {
 		fmt.Println("Error consuming RabbitMQ queue:", err)
 		return
 	}
-
-	paymentService := paymentService.NewPaymentService(db)
+	repository := repository.NewRepository(dbpool)
+	paymentService := paymentService.NewPaymentService(repository)
 	validator := validator.New()
 
 	paymentHandler := paymentHandler.NewPaymentHandler(paymentService, validator)

@@ -47,5 +47,9 @@ func (h *PaymentHandler) HandlePaymentMessage(message string) {
 		return
 	}
 
-	h.Service.ProcessPayment(*paymentMessage)
+	err = h.Service.ProcessPayment(*paymentMessage)
+	if err != nil {
+		fmt.Printf("Error processing payment: %v\n", err)
+		return
+	}
 }
