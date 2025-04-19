@@ -1,4 +1,4 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Response, Request } from "express";
 import { orderService } from "../../service/order";
 import { Req } from "../../utils/types";
 import { Create, Pay } from "../../models/order";
@@ -12,6 +12,21 @@ export const create = async (req: Req<Create>, res: Response, next: NextFunction
     next(error);
   }
 };
+
+export const get = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { user } = req;
+    const orders = await orderService.get({ userId: user.id });
+    if (!orders) {
+      res.status(404).json({ message: "No orders found" });
+      return;
+    }
+
+    res.status(200).json(orders);
+  } catch (error) {
+    next(error);
+  }
+}
 
 export const pay = async (req: Req<Pay>, res: Response, next: NextFunction) => {
   try {

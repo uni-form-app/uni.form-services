@@ -9,6 +9,11 @@ export namespace GetUnique {
     orderId: string;
   }
 }
+export namespace Get {
+  export type Args = {
+    userId: string;
+  }
+}
 
 export namespace Pay {
   export type Args = {

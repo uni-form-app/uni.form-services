@@ -5,4 +5,5 @@ import { orderController } from "../../controller/orders";
 
 export const orderRouter = Router()
   .post("/", validate(schema.create), orderController.create)
-  .post("/:orderId/pay", validate(schema.pay), orderController.pay);
+  .post("/:orderId/pay", validate(schema.pay), orderController.pay)
+  .get("/", orderController.get);

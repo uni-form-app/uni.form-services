@@ -2,7 +2,18 @@ import { config } from "../../config/env";
 import pg from "../../libs/prisma";
 import { rabbit } from "../../libs/rabbitmq";
 import { productService } from "../product";
-import { Create, GetUnique, Pay } from "./types";
+import { Create, Get, GetUnique, Pay } from "./types";
+
+export const get = async (args: Get.Args) => {
+  const { userId } = args;
+
+  const orders = await pg.order.findMany({
+    where: {
+      buyerId: userId
+    }
+  });
+  return orders;
+}
 
 export const getUnique = async (args: GetUnique.Args) => {
   const { orderId } = args;
