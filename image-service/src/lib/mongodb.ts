@@ -11,7 +11,7 @@ export class MongoDB {
       this.connection = mongoose.connection;
 
       this.connection.on('connected', () => {
-        console.log('Connected to MongoDB via Mongoose');
+        console.log('Connected to MongoDB');
       });
 
       this.connection.on('error', (err: Error) => {
@@ -45,7 +45,6 @@ export class MongoDB {
     document: T
   ): Promise<void> {
     await model.create(document);
-    console.log(`Inserted document into ${model.modelName}:`, document);
   }
 
   public async find<T>(
@@ -53,7 +52,6 @@ export class MongoDB {
     query: Partial<T> = {}
   ): Promise<T[]> {
     const results = await model.find(query);
-    console.log(`Found ${results.length} documents in ${model.modelName}`);
     return results;
   }
 

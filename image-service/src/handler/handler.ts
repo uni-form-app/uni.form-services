@@ -12,7 +12,6 @@ export class ImageHandler {
   async consume() {
     try {
       await this.rabbitMQ.subscribe(config.rabbitMQ.TOPICS.RABBIT_IMAGE_PROCESS, (msg: ImageMessage) => {
-        console.log("[CONSUMER] Received message:", msg);
         this.imageService.process(msg)
       });
     } catch (error) {

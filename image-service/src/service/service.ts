@@ -50,8 +50,6 @@ export class ImageService {
 
     const result: ImageResult = JSON.parse(response.choices[0].message.content);
 
-    console.log(result)
-
     await this.mongo.insertOne(model, {
       imageId: data.imageId,
       fabricCondition: result.fabricCondition,
