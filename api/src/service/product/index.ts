@@ -1,5 +1,8 @@
+import path from "path";
 import pg from "../../libs/prisma";
 import { Create, Get } from "./types";
+import fs from "fs";
+import { rabbit } from "../../libs/rabbitmq";
 
 export const create = async (args: Create.Args) => {
   const { ...data } = args;
@@ -46,6 +49,23 @@ export const remove = async (id: string) => {
   return await pg.product.delete({
     where: { id },
   });
+};
+
+export const uploadImage = async (id: string, file: Express.Multer.File) => {
+  try {
+    const filePath = path.join(__dirname, '../../../uploads', file.filename);
+    const imageBuffer = fs.readFileSync(filePath);
+    const base64Image = imageBuffer.toString('base64');
+
+    rabbit.publish<{ imageId: string, image: string }>("image.process", {
+      imageId: id,
+      image: base64Image
+    });
+
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw new Error("Image upload failed");
+  }
 };
 
 export * as productService from ".";
