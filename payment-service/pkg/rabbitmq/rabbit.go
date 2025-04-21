@@ -27,7 +27,7 @@ func NewConsumer(amqpURL string) (*Consumer, error) {
 
 func (c *Consumer) ConsumeQueue(queueName string) (<-chan amqp.Delivery, error) {
 	// Declara a fila (cria se não existir)
-	_, err := c.Channel.QueueDeclare(
+	queue, err := c.Channel.QueueDeclare(
 		queueName, // nome da fila
 		true,      // durable
 		false,     // auto-delete
@@ -37,6 +37,17 @@ func (c *Consumer) ConsumeQueue(queueName string) (<-chan amqp.Delivery, error) 
 	)
 	if err != nil {
 		return nil, fmt.Errorf("erro ao declarar a fila: %w", err)
+	}
+
+	err = c.Channel.QueueBind(
+		queueName,  // nome da fila
+		"",         // routingKey (pode ser vazio para todos os tópicos)
+		queue.Name, // nome da exchange
+		false,      // no-wait
+		nil,        // argumentos adicionais
+	)
+	if err != nil {
+		return nil, fmt.Errorf("erro ao fazer o binding da fila: %w", err)
 	}
 
 	// Consome mensagens da fila
