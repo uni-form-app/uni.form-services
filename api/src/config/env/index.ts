@@ -5,6 +5,7 @@ export const rabbitMQ = schema.rabbitMQ.parse({
   URI: process.env.RABBIT_URI,
   TOPICS: {
     RABBIT_PAYMENT_PROCESS: process.env.RABBIT_PAYMENT_PROCESS,
+    RABBIT_IMAGE_PROCESS: process.env.RABBIT_IMAGE_PROCESS,
   }
 })
 

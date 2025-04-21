@@ -27,7 +27,7 @@ export class RabbitMQ {
     await channel.assertExchange(topic, 'topic', { durable: true });
     channel.publish(topic, '', Buffer.from(JSON.stringify(message)));
 
-    console.log(`Published to ${topic}, message: ${JSON.stringify(message)}`);
+    console.log(`Published to ${topic}`);
   }
 
   public async subscribe<T>(

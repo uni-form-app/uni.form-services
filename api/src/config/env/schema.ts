@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 const rabbitTopcs = z.object({
   RABBIT_PAYMENT_PROCESS: z.string().default('payment.process'),
+  RABBIT_IMAGE_PROCESS: z.string().default('image.process'),
 })
 
 const rabbitMQ = z.object({

@@ -3,6 +3,7 @@ import pg from "../../libs/prisma";
 import { Create, Get } from "./types";
 import fs from "fs";
 import { rabbit } from "../../libs/rabbitmq";
+import { config } from "../../config/env";
 
 export const create = async (args: Create.Args) => {
   const { ...data } = args;
@@ -66,7 +67,7 @@ export const uploadImage = async (id: string, file: Express.Multer.File) => {
     })
 
     // publicar mensagem no rabbitmq para que ela sejá analizada pela IA
-    rabbit.publish<{ imageId: string, image: string }>("image.process", {
+    rabbit.publish<{ imageId: string, image: string }>(config.rabbitMQ.TOPICS.RABBIT_IMAGE_PROCESS, {
       imageId: id,
       image: base64Image
     });
