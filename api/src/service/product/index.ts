@@ -18,6 +18,14 @@ export const get = async (args: Get.Args) => {
   const { sortBy, order, search } = args;
 
   return await pg.product.findMany({
+    include: {
+      ProductImages: {
+        select: {
+          id: true,
+          path: true,
+        },
+      },
+    },
     where: {
       ...(search && {
         OR: [
