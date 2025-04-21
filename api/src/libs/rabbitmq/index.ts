@@ -25,7 +25,7 @@ export async function publish<T>(topic: string, message: T): Promise<void> {
   await channel.assertExchange(topic, 'topic', { durable: true });
   channel.publish(topic, '', Buffer.from(JSON.stringify(message)));
 
-  console.log(`Published to ${topic}, message: ${JSON.stringify(message)}`);
+  console.log(`Published to ${topic}`);
 }
 
 export async function subscribe<T>(

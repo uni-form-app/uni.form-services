@@ -5,8 +5,6 @@ import { RabbitMQ } from "./lib/rabbit";
 import { ImageService } from "./service/service";
 
 async function run() {
-  console.log("[APP] Aguardando mensagens...");
-
   const rabbit = new RabbitMQ(config.rabbitMQ.URI)
   const mongoDB = new MongoDB(config.mongodb.URI);
   const imageService = new ImageService(mongoDB);
