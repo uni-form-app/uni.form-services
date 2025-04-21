@@ -59,17 +59,19 @@ export const uploadImage = async (id: string, file: Express.Multer.File) => {
     const base64Image = imageBuffer.toString('base64');
 
     // salvar path da imagem no banco 
-    await pg.productImages.create({
-      data: {
-        productId: id,
-        path: file.filename,
-      }
-    })
+    return pg.$transaction(async (client) => {
+      const image = await client.productImages.create({
+        data: {
+          productId: id,
+          path: file.filename,
+        }
+      })
 
-    // publicar mensagem no rabbitmq para que ela sejá analizada pela IA
-    rabbit.publish<{ imageId: string, image: string }>(config.rabbitMQ.TOPICS.RABBIT_IMAGE_PROCESS, {
-      imageId: id,
-      image: base64Image
+      // publicar mensagem no rabbitmq para que ela sejá analizada pela IA
+      rabbit.publish<{ imageId: string, image: string }>(config.rabbitMQ.TOPICS.RABBIT_IMAGE_PROCESS, {
+        imageId: image.id,
+        image: base64Image
+      });
     });
 
   } catch (error) {
