@@ -43,9 +43,23 @@ services:
     networks:
       - uniform-network
 
+  mongodb:
+    container_name: mongodb
+    image: mongo:6.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - uniform-network
+
 volumes:
   postgres_data:
   rabbitmq_data:
+  mongodb_data:
 
 networks:
   uniform-network:
