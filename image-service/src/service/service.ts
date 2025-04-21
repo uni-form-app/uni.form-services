@@ -23,6 +23,8 @@ export class ImageService {
       ImageEvaluationSchemaDefinition
     );
 
+    console.log("[IMAGE-SERVICE] Iniciando processamento da imagem...");
+
     const response = await this.openAI.chat.completions.create({
       model: 'gpt-4.1-mini', // modelo que suporta imagens e é barato
       messages: [

@@ -10,6 +10,7 @@ export class RabbitMQ {
   private async getConnection(): Promise<Connection> {
     if (!this.connection) {
       this.connection = await client.connect(this.uri);
+      console.log('✅ Connected to RabbitMQ');
     }
     return this.connection;
   }
@@ -18,6 +19,7 @@ export class RabbitMQ {
     if (!this.channel) {
       const conn = await this.getConnection();
       this.channel = await conn.createChannel();
+      console.log('✅ Channel created');
     }
     return this.channel;
   }
@@ -25,9 +27,8 @@ export class RabbitMQ {
   public async publish<T>(topic: string, message: T): Promise<void> {
     const channel = await this.getChannel();
     await channel.assertExchange(topic, 'topic', { durable: true });
-    channel.publish(topic, '', Buffer.from(JSON.stringify(message)));
 
-    console.log(`Published to ${topic}`);
+    channel.publish(topic, '', Buffer.from(JSON.stringify(message)));
   }
 
   public async subscribe<T>(
@@ -37,6 +38,8 @@ export class RabbitMQ {
     const channel = await this.getChannel();
 
     await channel.assertExchange(topic, 'topic', { durable: true });
+
+    // Fila exclusiva e temporária para esse consumidor
     const queue = await channel.assertQueue('', { exclusive: true });
 
     await channel.bindQueue(queue.queue, topic, '');

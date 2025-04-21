@@ -23,9 +23,9 @@ async function getChannel(): Promise<Channel> {
 export async function publish<T>(topic: string, message: T): Promise<void> {
   const channel = await getChannel();
   await channel.assertExchange(topic, 'topic', { durable: true });
-  channel.publish(topic, '', Buffer.from(JSON.stringify(message)));
 
-  console.log(`Published to ${topic}`);
+  channel.publish(topic, '', Buffer.from(JSON.stringify(message)));
+  console.log("published to", topic);
 }
 
 export async function subscribe<T>(
@@ -35,9 +35,12 @@ export async function subscribe<T>(
   const channel = await getChannel();
 
   await channel.assertExchange(topic, 'topic', { durable: true });
+
   const queue = await channel.assertQueue('', { exclusive: true });
 
+  // Bind usando routingKey padrão ''
   await channel.bindQueue(queue.queue, topic, '');
+
 
   await channel.consume(
     queue.queue,
