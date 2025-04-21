@@ -50,7 +50,7 @@ model Product {
 model ProductImages {
   id        String  @id @default(dbgenerated("gen_random_uuid()"))
   productId String
-  url       String
+  path      String
   product   Product @relation(fields: [productId], references: [id])
 }
 
