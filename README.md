@@ -14,7 +14,7 @@ Este repositório contém os serviços do aplicativo uni.form, um sistema de ven
 - [X] Autenticação de usuários.
 - [X] Criação e gerenciamento de anúncios de produtos.
 - [X] Cadastro e gestão de parceiros (pontos de retirada).
-- [] Seleção de pontos de retirada por geolocalização.
+- [X] Seleção de pontos de retirada por geolocalização.
 - [X] Integração com sistema de pagamento para controle de comissões.
   - [] Implementação de taxa de 5% sobre
 ## Regras de negócio
