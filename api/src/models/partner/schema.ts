@@ -22,3 +22,12 @@ export const exclude = z.object({
     partnerId: z.string().uuid(),
   }),
 })
+
+export const get = z.object({
+  query: z.object({
+    lat: z.coerce.number().optional(),
+    lng: z.coerce.number().optional(),
+    radius: z.coerce.number().optional(),
+    search: z.string().optional(),
+  }),
+});

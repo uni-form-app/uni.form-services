@@ -10,6 +10,7 @@ export interface Partner {
   ownerId: string;
 }
 
-export type create = z.infer<typeof schema.create>;
-export type update = z.infer<typeof schema.update>;
-export type exclude = z.infer<typeof schema.exclude>;
+export type Create = z.infer<typeof schema.create>;
+export type Update = z.infer<typeof schema.update>;
+export type Exclude = z.infer<typeof schema.exclude>;
+export type Get = z.infer<typeof schema.get>;

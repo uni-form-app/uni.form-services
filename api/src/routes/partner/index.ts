@@ -6,4 +6,5 @@ import { partnerController } from "../../controller/partners";
 export const partnerRouter = Router()
   .post("/", validate(schema.create), partnerController.create)
   .put("/:partnerId", validate(schema.update), partnerController.update)
-  .delete("/:partnerId", validate(schema.exclude), partnerController.remove);
+  .delete("/:partnerId", validate(schema.exclude), partnerController.remove)
+  .get("/", validate(schema.get), partnerController.get);

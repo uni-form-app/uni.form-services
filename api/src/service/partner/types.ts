@@ -11,3 +11,12 @@ export namespace Update {
 export namespace Remove {
   export type Args = string;
 }
+
+export namespace Get {
+  export type Args = {
+    lat?: number;
+    lng?: number;
+    radius?: number;
+    search?: string;
+  };
+}

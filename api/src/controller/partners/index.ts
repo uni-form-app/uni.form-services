@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import { partnerService } from "../../service/partner";
 import { Req } from "../../utils/types";
-import { create as Create, update as Update, exclude as Exclude } from "../../models/partner";
+import { Create, Update, Exclude, Get } from "../../models/partner";
 
 export const create = async (req: Req<Create>, res: Response, next: NextFunction) => {
   try {
@@ -34,5 +34,15 @@ export const remove = async (req: Req<Exclude>, res: Response, next: NextFunctio
     next(error);
   }
 };
+
+export const get = async (req: Req<Get>, res: Response, next: NextFunction) => {
+  try {
+    const { query: { lat, lng, radius, search } } = req;
+    const partners = await partnerService.get({ radius, lng, lat, search });
+    res.status(200).json(partners);
+  } catch (error) {
+    next(error);
+  }
+}
 
 export * as partnerController from ".";
