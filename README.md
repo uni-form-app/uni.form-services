@@ -15,8 +15,8 @@ Este repositório contém os serviços do aplicativo uni.form, um sistema de ven
 - [X] Criação e gerenciamento de anúncios de produtos.
 - [X] Cadastro e gestão de parceiros (pontos de retirada).
 - [] Seleção de pontos de retirada por geolocalização.
-- [] Integração com sistema de pagamento para controle de comissões.
-
+- [X] Integração com sistema de pagamento para controle de comissões.
+  - [] Implementação de taxa de 5% sobre
 ## Regras de negócio
 - Só usuários autenticados podem anunciar, comprar ou doar.
 - Todas as transações tem uma taxa de 5% sobre o valor total.

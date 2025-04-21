@@ -1,10 +1,5 @@
-include .env
-export DB_URI := $(DATABASE_URL)
-IMAGE_NAME=jonasssneto/payment-service
+IMAGE_NAME=jonasssneto/uniform-api
 VERSION?=latest
-
-gen:
-	sqlc generate
 
 build:
 	docker build -t $(IMAGE_NAME):$(VERSION) .
