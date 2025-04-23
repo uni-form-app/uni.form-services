@@ -3,7 +3,7 @@ import { config } from "../../config/env";
 import { User } from "../../models/user";
 
 export const generateToken = (user: User): string => {
-  return jwt.sign(user, config.env.JWT_SECRET);
+  return jwt.sign(user, config.env.JWT_SECRET, { expiresIn: '7d', });
 };
 
 export const verifyToken = (token: string): User => {
