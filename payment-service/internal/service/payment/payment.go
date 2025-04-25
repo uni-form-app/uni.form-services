@@ -64,6 +64,6 @@ func (s *PaymentService) ProcessPayment(payload PaymentPayload) error {
 		return err
 	}
 
-	s.logger.Success("Payment processed successfully for order ID: " + payload.OrderID)
+	s.logger.Info("Payment processed successfully for order ID: " + payload.OrderID)
 	return nil
 }

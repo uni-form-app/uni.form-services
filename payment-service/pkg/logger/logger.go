@@ -1,53 +1,37 @@
 package logger
 
 import (
-	"fmt"
-	"log"
-	"time"
+	"main/config"
+	"os"
+
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 type Logger struct {
-	name string
+	*zap.SugaredLogger
 }
 
-const (
-	Reset    = "\033[0m"
-	Red      = "\033[31m"
-	BlueBold = "\033[34;1m"
-	Yellow   = "\033[33m"
-	Green    = "\033[32m"
-)
-
-func New(name string) *Logger {
-	return &Logger{name: name}
-}
-
-func (l *Logger) log(color string, msg ...interface{}) {
-	timestamp := time.Now().UTC().Format(time.RFC3339)
-	message := fmt.Sprint(msg...)
-	log.Printf("%s[%s] %s%s %s\n", color, timestamp, l.name, Reset, message)
-}
-
-func (l *Logger) Info(msg ...interface{})    { l.log(BlueBold, msg...) }
-func (l *Logger) Warning(msg ...interface{}) { l.log(Yellow, msg...) }
-func (l *Logger) Success(msg ...interface{}) { l.log(Green, msg...) }
-func (l *Logger) Error(msg ...interface{})   { l.log(Red, msg...) }
-
-func (l *Logger) HealthCheck(msg ...interface{}) {
-	if time.Now().Minute()%10 == 0 {
-		l.Success(msg...)
+func New(_ string) *Logger {
+	loggerLevel := zap.InfoLevel
+	if config.Env.Development {
+		loggerLevel = zap.DebugLevel
 	}
-}
 
-// Helpers
-func FatalError(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
+	// Arquivo para onde os logs vão ser escritos
+	file, _ := os.OpenFile("logs/app.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
-func LogError(err error) {
-	if err != nil {
-		log.Println(err)
-	}
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder // formato mais legível
+
+	core := zapcore.NewTee(
+		// Log para o terminal
+		zapcore.NewCore(zapcore.NewConsoleEncoder(encoderConfig), zapcore.AddSync(os.Stdout), loggerLevel),
+		// Log para o arquivo
+		zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), zapcore.AddSync(file), loggerLevel),
+	)
+
+	logger := zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
+
+	return &Logger{SugaredLogger: logger.Sugar()}
 }

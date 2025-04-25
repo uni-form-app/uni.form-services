@@ -33,7 +33,7 @@ services:
       - ./env/rabbit/rabbitmq.env
     ports:
       - "5672:5672"
-      - "15672:15672" 
+      - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
@@ -51,10 +51,68 @@ services:
     networks:
       - uniform-network
 
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./logs:/logs
+      - ./loki-config.yaml:/etc/loki/loki-config.yaml
+    networks:
+      - uniform-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - loki
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - uniform-network
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    restart: unless-stopped
+    volumes:
+      - ./logs:/var/log
+      - ./loki-config.yaml:/etc/loki/loki-config.yaml
+
+    networks:
+      - uniform-network
+
+  # payment-service:
+  #   container_name: payment-service
+  #   build:
+  #     context: ../payment-service
+  #     dockerfile: Dockerfile
+  #   env_file:
+  #     - ../payment-service/.env
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - ./logs:/app/logs
+  #   networks:
+  #     - uniform-network
+  #   depends_on:
+  #     - rabbitmq
+  #     - db
+  #     - mongodb
+  #     - loki
+
 volumes:
   postgres_data:
   rabbitmq_data:
   mongodb_data:
+  grafana-storage:
 
 networks:
   uniform-network:
