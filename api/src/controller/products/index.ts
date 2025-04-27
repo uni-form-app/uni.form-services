@@ -1,15 +1,21 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { productService } from "../../service/product";
 import { Req } from "../../utils/types";
 import { Create, Get, GetUnique, Remove, Update } from "../../models/product";
 
 export const create = async (req: Req<Create>, res: Response, next: NextFunction) => {
   try {
-    const { body: { ...data }, user } = req;
+    const { body: { ...data }, user, file } = req;
+
+    if (!file) {
+      res.status(400).json({ message: "product image required" });
+      return;
+    }
 
     await productService.create({
       ...data,
       sellerId: user.id,
+      file,
     });
 
     res.status(201).json({ message: "product created" });
@@ -71,24 +77,5 @@ export const remove = async (req: Req<Remove>, res: Response, next: NextFunction
     next(error);
   }
 };
-
-export const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { params: { productId }, file } = req;
-
-    if (!file) {
-      res.status(400).json({ message: "No files uploaded" });
-      return;
-    }
-
-    await productService.uploadImage(productId, file);
-
-    res.status(200).json({ message: "product image updated" });
-  } catch (error) {
-    next(error);
-  }
-}
-
-
 
 export * as productController from ".";

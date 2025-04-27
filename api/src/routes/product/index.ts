@@ -32,13 +32,13 @@ const upload = multer({
 });
 
 export const productRouter = Router()
-  .post("/", validate(schema.create), productController.create)
+  .post(
+    "/",
+    upload.single("image"),
+    validate(schema.create),
+    productController.create
+  )
   .get("/", validate(schema.get), productController.get)
   .get("/:productId", validate(schema.getUnique), productController.getUnique)
   .put("/:productId", validate(schema.update), productController.update)
   .delete("/:productId", validate(schema.remove), productController.remove)
-  .post(
-    "/:productId/image",
-    upload.single("image"),
-    productController.uploadImage
-  )

@@ -7,7 +7,6 @@ export interface Product {
   description: string,
   size: string,
   school: string,
-  condition: number,
   price: number,
   status: ProductStatus
   sellerId: string

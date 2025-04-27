@@ -7,8 +7,7 @@ export const create = z.object({
     description: z.string().min(1, "Description is required"),
     size: z.string().min(1, "Size is required"),
     school: z.string().min(1, "School is required"),
-    condition: z.number().min(1, "Condition is required"),
-    price: z.number().min(1, "Price is required"),
+    price: z.coerce.number(),
     status: z.nativeEnum(ProductStatus).default(ProductStatus.AVAILABLE),
   })
 });
@@ -22,7 +21,7 @@ export const update = z.object({
 
 export const get = z.object({
   query: z.object({
-    sortBy: z.enum(["price", "createdAt", "name",]).default("createdAt"),
+    sortBy: z.enum(["price", "createdAt", "name"]).default("createdAt"),
     order: z.enum(["asc", "desc"]).default("desc"),
     search: z.string().optional(),
   }),

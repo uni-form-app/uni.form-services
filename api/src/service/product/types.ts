@@ -1,7 +1,9 @@
 import { Product } from "../../models/product";
 
 export namespace Create {
-  export type Args = Product
+  export interface Args extends Product {
+    file: Express.Multer.File;
+  }
 }
 
 export namespace Get {

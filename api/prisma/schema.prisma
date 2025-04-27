@@ -37,8 +37,7 @@ model Product {
   description   String
   size          String
   school        String
-  condition     Int
-  price         Float
+  price         Decimal         @db.Decimal(10, 2)
   status        ProductStatus   @default(AVAILABLE)
   createdAt     DateTime        @default(now()) @db.Timestamptz(6)
   sellerId      String
