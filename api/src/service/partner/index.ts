@@ -41,7 +41,6 @@ export const get = async (args: Get.Args) => {
     },
   });
 
-  // Se lat, lng e radius forem fornecidos, filtra os parceiros por distância
   if (lat && lng && radius) {
     const filteredPartners = partners
       .map(partner => {

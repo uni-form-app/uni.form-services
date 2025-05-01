@@ -51,6 +51,14 @@ export const get = async (args: Get.Args) => {
 
 export const getById = async (id: string) => {
   return await pg.product.findUnique({
+    include: {
+      ProductImages: {
+        select: {
+          id: true,
+          path: true,
+        },
+      },
+    },
     where: { id },
   });
 };
