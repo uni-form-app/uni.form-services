@@ -16,7 +16,6 @@ export const create = async (req: Req<Create>, res: Response, next: NextFunction
 export const get = async (req: Req<Get>, res: Response, next: NextFunction) => {
   try {
     const { user, query: { status } } = req;
-    console.log(status)
 
     const orders = await orderService.get({ userId: user.id, status });
     if (!orders) {
@@ -32,7 +31,7 @@ export const get = async (req: Req<Get>, res: Response, next: NextFunction) => {
 
 export const pay = async (req: Req<Pay>, res: Response, next: NextFunction) => {
   try {
-    const { params: { orderId }, user } = req;
+    const { params: { orderId } } = req;
     const order = await orderService.pay({ orderId });
     res.status(200).json(order);
   } catch (error) {
