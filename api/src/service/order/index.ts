@@ -1,6 +1,8 @@
 import { OrderStatus } from "@prisma/client";
+import { config } from "../../config/env";
 import pg from "../../libs/prisma";
-import { Create, Get, GetUnique } from "./types";
+import { rabbit } from "../../libs/rabbitmq";
+import { Create, Get, GetUnique, Pay } from "./types";
 
 export const get = async (args: Get.Args) => {
   const { userId, status } = args;
@@ -81,5 +83,21 @@ export const create = async (args: Create.Args) => {
   });
 };
 
+export const pay = async (args: Pay.Args) => {
+  const { orderId } = args;
+
+  const order = await getUnique({ orderId });
+  if (!order) {
+    throw new Error("Order not found");
+  }
+
+  if (order.status !== "PENDING") {
+    throw new Error("Order is not pending");
+  }
+
+  await rabbit.publish<Pay.Args>(config.rabbitMQ.TOPICS.RABBIT_PAYMENT_PROCESS, {
+    orderId
+  })
+};
 
 export * as orderService from ".";
