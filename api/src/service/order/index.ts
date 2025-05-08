@@ -17,11 +17,18 @@ export const get = async (args: Get.Args) => {
 
   const orders = await pg.order.findMany({
     select: {
+      id: true,
       product: {
         select: {
           id: true,
           name: true,
           price: true,
+          ProductImages: {
+            select: {
+              id: true,
+              path: true,
+            },
+          }
         },
       },
       partner: {
