@@ -35,6 +35,9 @@ export const get = async (args: Get.Args) => {
       },
     },
     where: {
+      status: {
+        notIn: ['SOLD']
+      },
       ...(search && {
         OR: [
           { name: { contains: search, mode: "insensitive" } },
