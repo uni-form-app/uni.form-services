@@ -9,3 +9,4 @@ export interface Order {
 
 export type Create = z.infer<typeof schema.create>;
 export type Pay = z.infer<typeof schema.pay>;
+export type Get = z.infer<typeof schema.get>

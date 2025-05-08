@@ -1,3 +1,4 @@
+import { OrderStatus } from "@prisma/client";
 import { Order } from "../../models/order";
 
 export namespace Create {
@@ -12,6 +13,7 @@ export namespace GetUnique {
 export namespace Get {
   export type Args = {
     userId: string;
+    status?: OrderStatus[] | OrderStatus;
   }
 }
 

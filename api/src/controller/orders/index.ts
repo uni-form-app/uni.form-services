@@ -1,7 +1,7 @@
-import { NextFunction, Response, Request } from "express";
+import { NextFunction, Response } from "express";
 import { orderService } from "../../service/order";
 import { Req } from "../../utils/types";
-import { Create, Pay } from "../../models/order";
+import { Create, Pay, Get } from "../../models/order";
 
 export const create = async (req: Req<Create>, res: Response, next: NextFunction) => {
   try {
@@ -13,10 +13,12 @@ export const create = async (req: Req<Create>, res: Response, next: NextFunction
   }
 };
 
-export const get = async (req: Request, res: Response, next: NextFunction) => {
+export const get = async (req: Req<Get>, res: Response, next: NextFunction) => {
   try {
-    const { user } = req;
-    const orders = await orderService.get({ userId: user.id });
+    const { user, query: { status } } = req;
+    console.log(status)
+
+    const orders = await orderService.get({ userId: user.id, status });
     if (!orders) {
       res.status(404).json({ message: "No orders found" });
       return;
